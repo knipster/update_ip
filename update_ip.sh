@@ -14,6 +14,10 @@ if [ -e ~/.update_iprc ] ; then
     source ~/.update_iprc ; 
 fi
 
+function update_ip() {
+    wget $AFRAID_UPDATE_WGET_ARGS -q -O - $AFRAID_UPDATE_URL
+}
+
 function dns_ip() {
     echo -n "DNS IP: " >$EXTRA_OUTPUT
     dns_lookup | dns_filter | tee $EXTRA_OUTPUT
@@ -63,5 +67,5 @@ if [ `dns_ip` = `router_ip` ]; then
     echo  "IPs Match" > $EXTRA_OUTPUT ; 
 else 
     echo "IPs do not match" >$EXTRA_OUTPUT ; 
-    wget $AFRAID_UPDATE_WGET_ARGS -q -O - $AFRAID_UPDATE_URL
+    update_ip;
 fi

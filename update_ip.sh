@@ -14,24 +14,24 @@ if [ -e ~/.update_iprc ] ; then
     source ~/.update_iprc ; 
 fi
 
-function update_ip() {
+function UPDATE_IP() {
     wget $AFRAID_UPDATE_WGET_ARGS -q -O - $AFRAID_UPDATE_URL
 }
 
-function dns_ip() {
+function DNS_IP() {
     echo -n "DNS IP: " >$EXTRA_OUTPUT
-    dns_lookup | dns_filter | tee $EXTRA_OUTPUT
+    DNS_LOOKUP | DNS_FILTER | tee $EXTRA_OUTPUT
 }
 
 # Command to get my linksys router's external ip
-function router_ip() {
+function ROUTER_IP() {
     echo -n "Router IP: " >$EXTRA_OUTPUT
-    router_fetch | router_filter | tee $EXTRA_OUTPUT
+    ROUTER_FETCH | ROUTER_FILTER | tee $EXTRA_OUTPUT
 }
 
 # router_filter: this is the function mostly likely to require customization.
 # The body should be a Pipe Command that takes the contents of the router status page on STDIN and Dumps the WAN IP on STDOUT
-function router_filter() {
+function ROUTER_FILTER() {
     # sed:  scan STDIN for ipaddresses and dump them to STDOUT
     # sed -n:  do not print input lines except substitution is performed: s/old/new/p (p suffix causes print)
     # sed -r:  enable extended regexps such as {min,max}
@@ -41,14 +41,14 @@ function router_filter() {
     sed -n -r -e 's/.*[^0-9]([1-9][0-9]{0,2}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}).*/\1/p' | head -1 
 }
 
-function router_fetch() {
+function ROUTER_FETCH() {
     # wget: Fetch the router status page; uses ~/.netrc for basic authentication (machine, login, password)
     # wget -q:  Silent Mode no output
     # wget -O -: dump output as stdout
     wget $ROUTER_WGET_ARGS -q -O - $ROUTER_STATUS_PAGE 
 }
 
-function dns_filter() {
+function DNS_FILTER() {
     # tail -1: print last line of STDIN
     # cut:  print the 4th "word"
     # cut -d ' ': use space as field delimeter
@@ -56,16 +56,16 @@ function dns_filter() {
     tail -1 |  cut -d ' ' -f 4 
 }
 
-function dns_lookup() {
+function DNS_LOOKUP() {
     # host:  lookup hostname from dns server
     host $HOSTNAME ns1.afraid.org 
 }
 
 # Back tick substitutes STDOUT of command for value
 echo "Checking $HOSTNAME" > $EXTRA_OUTPUT
-if [ `dns_ip` = `router_ip` ]; then 
+if [ `DNS_IP` = `ROUTER_IP` ]; then 
     echo  "IPs Match" > $EXTRA_OUTPUT ; 
 else 
     echo "IPs do not match" >$EXTRA_OUTPUT ; 
-    update_ip;
+    UPDATE_IP;
 fi

@@ -10,8 +10,9 @@ EXTRA_OUTPUT="/dev/null"  # Replace with /dev/stderr for more verbosity
 #  Poor Man's Config File Technique:  
 #    Copy the Above Block of variable definitions into ~/.update_iprc and replace
 #    with your own configuration
+
 if [ -e ~/.update_iprc ] ; then
-    source ~/.update_iprc ; 
+source ~/.update_iprc ;
 fi
 
 function UPDATE_IP() {
@@ -63,9 +64,14 @@ function DNS_LOOKUP() {
 
 # Back tick substitutes STDOUT of command for value
 echo "Checking $HOSTNAME" > $EXTRA_OUTPUT
-if [ `DNS_IP` = `ROUTER_IP` ]; then 
+
+# cache values in variables for later logging
+ROUTER_IP_VAR=`ROUTER_IP`
+DNS_IP_VAR=`DNS_IP`
+if [ $DNS_IP_VAR = $ROUTER_IP_VAR ]; then 
     echo  "IPs Match" > $EXTRA_OUTPUT ; 
 else 
     echo "IPs do not match" >$EXTRA_OUTPUT ; 
+    echo "`date` $DNS_IP_VAR -> $ROUTER_IP_VAR" >> `dirname $0`/update_ip.log
     UPDATE_IP;
 fi

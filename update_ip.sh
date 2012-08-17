@@ -10,9 +10,8 @@ EXTRA_OUTPUT="/dev/null"  # Replace with /dev/stderr for more verbosity
 #  Poor Man's Config File Technique:  
 #    Copy the Above Block of variable definitions into ~/.update_iprc and replace
 #    with your own configuration
-
 if [ -e ~/.update_iprc ] ; then
-source ~/.update_iprc ;
+    source ~/.update_iprc ;
 fi
 
 function UPDATE_IP() {

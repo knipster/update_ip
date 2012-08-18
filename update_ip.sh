@@ -67,7 +67,7 @@ echo "Checking $HOSTNAME" > $EXTRA_OUTPUT
 # cache values in variables for later logging
 ROUTER_IP_VAR=`ROUTER_IP`
 DNS_IP_VAR=`DNS_IP`
-if [ $DNS_IP_VAR = $ROUTER_IP_VAR ]; then 
+if [ "$DNS_IP_VAR" = "$ROUTER_IP_VAR" ]; then 
     echo  "IPs Match" > $EXTRA_OUTPUT ; 
 else 
     echo "IPs do not match" >$EXTRA_OUTPUT ; 

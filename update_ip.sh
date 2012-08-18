@@ -3,7 +3,7 @@
 HOSTNAME="<ENTERYOURSUBDOMAINHERE>"
 ROUTER_STATUS_PAGE="http://192.168.1.1/Status_Router.asp"
 AFRAID_UPDATE_URL="http://freedns.afraid.org/dynamic/update.php?<ENTERYOURKEYHERE>" 
-ROUTER_WGET_ARGS="--timeout=2 --tries=2"
+ROUTER_WGET_ARGS="--timeout=2 --tries=2 --auth-no-challenge"
 AFRAID_UPDATE_WGET_ARGS="--timeout=2 --tries=2"
 EXTRA_OUTPUT="/dev/null"  # Replace with /dev/stderr for more verbosity
 
@@ -63,9 +63,14 @@ function DNS_LOOKUP() {
 
 # Back tick substitutes STDOUT of command for value
 echo "Checking $HOSTNAME" > $EXTRA_OUTPUT
-if [ `DNS_IP` = `ROUTER_IP` ]; then 
+
+# cache values in variables for later logging
+ROUTER_IP_VAR=`ROUTER_IP`
+DNS_IP_VAR=`DNS_IP`
+if [ "$DNS_IP_VAR" = "$ROUTER_IP_VAR" ]; then 
     echo  "IPs Match" > $EXTRA_OUTPUT ; 
 else 
     echo "IPs do not match" >$EXTRA_OUTPUT ; 
+    echo "`date` $DNS_IP_VAR -> $ROUTER_IP_VAR" >> `dirname $0`/update_ip.log
     UPDATE_IP;
 fi

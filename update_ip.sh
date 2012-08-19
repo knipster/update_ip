@@ -3,7 +3,7 @@
 HOSTNAME="<ENTERYOURSUBDOMAINHERE>"
 ROUTER_STATUS_PAGE="http://192.168.1.1/Status_Router.asp"
 AFRAID_UPDATE_URL="http://freedns.afraid.org/dynamic/update.php?<ENTERYOURKEYHERE>" 
-ROUTER_WGET_ARGS="--timeout=2 --tries=2 --auth-no-challenge"
+ROUTER_WGET_ARGS="--timeout=2 --tries=2" # note that --tries must be at least 2 if your router, as most, has basic authentication enabled
 AFRAID_UPDATE_WGET_ARGS="--timeout=2 --tries=2"
 EXTRA_OUTPUT="/dev/null"  # Replace with /dev/stderr for more verbosity
 

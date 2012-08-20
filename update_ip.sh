@@ -67,6 +67,15 @@ echo "Checking $HOSTNAME" > $EXTRA_OUTPUT
 # cache values in variables for later logging
 ROUTER_IP_VAR=`ROUTER_IP`
 DNS_IP_VAR=`DNS_IP`
+
+# check to ensure both look like IP addresses
+IP_REGEXP="^[1-9][0-9]{0,2}\.[1-9][0-9]{0,2}\.[1-9][0-9]{0,2}\.[1-9][0-9]{0,2}$"
+if [[ ! $ROUTER_IP_VAR =~ $IP_REGEXP || ! $DNS_IP_VAR =~ $IP_REGEXP ]] ; then
+    echo "IP Failure" > $EXTRA_OUTPUT
+    echo "`date` IP_FAILURE DNS=$DNS_IP_VAR ROUTER=$ROUTER_IP_VAR" >> `dirname $0`/update_ip.log
+    exit
+fi
+
 if [ "$DNS_IP_VAR" = "$ROUTER_IP_VAR" ]; then 
     echo  "IPs Match" > $EXTRA_OUTPUT ; 
 else 

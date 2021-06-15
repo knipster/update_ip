@@ -26,4 +26,3 @@ Configuration
 Advanced Configuration
 
 	 If your router isn't either a Linksys WRT610N or compatible, modify the router_filter function to
-    
